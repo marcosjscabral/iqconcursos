@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  name          String?
+  avatarUrl     String?
+  createdAt     DateTime       @default(now())
+  decks         Deck[]
+  examAttempts  ExamAttempt[]
+  studySessions StudySession[]
+}
+
+model Deck {
+  id            String          @id @default(uuid())
+  name          String
+  description   String?
+  subject       String
+  userId        String
+  user          User            @relation(fields: [userId], references: [id])
+  flashcards    Flashcard[]
+  studySessions StudySession[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model Flashcard {
+  id              String    @id @default(uuid())
+  front           String
+  back            String
+  difficulty      String    @default("new")
+  ease            Float     @default(2.5)
+  interval        Int       @default(0)
+  repetitions     Int       @default(0)
+  nextReviewDate  DateTime  @default(now())
+  lastReviewedAt  DateTime?
+  deckId          String
+  deck            Deck      @relation(fields: [deckId], references: [id])
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Exam {
+  id            String        @id @default(uuid())
+  title         String
+  description   String?
+  subject       String
+  questionCount Int           @default(10)
+  timeLimitMin  Int?
+  questions     Question[]
+  attempts      ExamAttempt[]
+  createdAt     DateTime      @default(now())
+}
+
+model Question {
+  id            String        @id @default(uuid())
+  text          String
+  examId        String
+  exam          Exam          @relation(fields: [examId], references: [id])
+  alternatives  Alternative[]
+  orderIndex    Int           @default(0)
+}
+
+model Alternative {
+  id            String        @id @default(uuid())
+  text          String
+  isCorrect     Boolean       @default(false)
+  questionId    String
+  question      Question      @relation(fields: [questionId], references: [id])
+  orderIndex    Int           @default(0)
+}
+
+model ExamAttempt {
+  id             String    @id @default(uuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id])
+  examId         String
+  exam           Exam      @relation(fields: [examId], references: [id])
+  score          Int       @default(0)
+  totalQuestions Int       @default(0)
+  answers        Json?
+  startedAt      DateTime  @default(now())
+  finishedAt     DateTime?
+}
+
+model StudySession {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  deckId        String
+  deck          Deck     @relation(fields: [deckId], references: [id])
+  cardsReviewed Int      @default(0)
+  easyCount     Int      @default(0)
+  mediumCount   Int      @default(0)
+  hardCount     Int      @default(0)
+  durationMin   Int      @default(0)
+  createdAt     DateTime @default(now())
+}
