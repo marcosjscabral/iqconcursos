@@ -3,9 +3,23 @@ import { NextResponse, type NextRequest } from "next/server";
 
 /**
  * Atualiza a sessão do Supabase via middleware.
- * - Protege rotas /(app): redireciona para /login se não autenticado.
+ * - Protege rotas da área autenticada: redireciona para /login se não autenticado.
  * - Se já autenticado e acessa /login, redireciona para /flashcards.
+ *
+ * NOTA: Os grupos de rotas do Next.js App Router como (app) e (auth) são
+ * transparentes na URL. A rota /app/(app)/flashcards/page.tsx aparece como
+ * /flashcards no browser, nunca como /(app)/flashcards.
  */
+
+const PROTECTED_ROUTES = [
+  "/flashcards",
+  "/simulados",
+  "/dashboard",
+  "/anotacoes",
+  "/vade-mecum",
+  "/perfil",
+];
+
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
@@ -42,7 +56,10 @@ export async function updateSession(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   // Rotas protegidas: redireciona para /login se não autenticado
-  if (!user && pathname.startsWith("/(app)")) {
+  const isProtected = PROTECTED_ROUTES.some((route) =>
+    pathname.startsWith(route)
+  );
+  if (!user && isProtected) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);

@@ -4,10 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navItems = [
-  { href: "/flashcards", icon: "layers", label: "Flashcards" },
-  { href: "/anotacoes", icon: "description", label: "Anotações" },
-  { href: "/vade-mecum", icon: "menu_book", label: "Vade Mecum" },
-  { href: "/simulados", icon: "psychology", label: "IA Mentor" },
+  { href: "/flashcards", icon: "layers",      label: "Flashcards" },
+  { href: "/simulados",  icon: "quiz",        label: "Simulados"  },
+  { href: "/anotacoes",  icon: "description", label: "Anotações"  },
+  { href: "/vade-mecum", icon: "menu_book",   label: "Vade Mecum" },
 ];
 
 /**
@@ -17,11 +17,8 @@ const navItems = [
 export function BottomNav() {
   const pathname = usePathname();
 
-  const isActive = (href: string): boolean => {
-    if (href === "/flashcards") return pathname.startsWith("/flashcards");
-    if (href === "/simulados") return pathname.startsWith("/simulados");
-    return pathname === href;
-  };
+  const isActive = (href: string): boolean =>
+    pathname.startsWith(href);
 
   return (
     <nav className="md:hidden fixed bottom-0 w-full z-50 bg-surface shadow-[0_-2px_10px_rgba(71,85,105,0.08)]">
