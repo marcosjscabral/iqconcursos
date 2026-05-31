@@ -11,13 +11,16 @@ import { NextResponse, type NextRequest } from "next/server";
  * /flashcards no browser, nunca como /(app)/flashcards.
  */
 
+// Lista de rotas protegidas que exigem login do usuário.
+// Para liberar o acesso temporariamente (como fizemos agora), basta comentar as rotas ou deixar a lista vazia: []
+// Para restringir e proteger as rotas novamente, basta descomentá-las abaixo.
 const PROTECTED_ROUTES = [
-  "/flashcards",
-  "/simulados",
-  "/dashboard",
-  "/anotacoes",
-  "/vade-mecum",
-  "/perfil",
+  // "/flashcards",
+  // "/simulados",
+  // "/dashboard",
+  // "/anotacoes",
+  // "/vade-mecum",
+  // "/perfil",
 ];
 
 export async function updateSession(request: NextRequest) {
