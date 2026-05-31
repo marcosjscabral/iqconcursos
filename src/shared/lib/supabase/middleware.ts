@@ -14,7 +14,7 @@ import { NextResponse, type NextRequest } from "next/server";
 // Lista de rotas protegidas que exigem login do usuário.
 // Para liberar o acesso temporariamente (como fizemos agora), basta comentar as rotas ou deixar a lista vazia: []
 // Para restringir e proteger as rotas novamente, basta descomentá-las abaixo.
-const PROTECTED_ROUTES = [
+const PROTECTED_ROUTES: string[] = [
   // "/flashcards",
   // "/simulados",
   // "/dashboard",
