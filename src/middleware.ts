@@ -2,11 +2,11 @@ import { updateSession } from "@/shared/lib/supabase/middleware";
 import type { NextRequest } from "next/server";
 
 /**
- * Proxy global do Next.js 16.
+ * Middleware global do Next.js.
  * Executa a atualização de sessão do Supabase em todas as rotas,
  * exceto arquivos estáticos e recursos internos.
  */
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   return await updateSession(request);
 }
 
