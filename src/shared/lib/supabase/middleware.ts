@@ -30,9 +30,8 @@ export async function updateSession(request: NextRequest) {
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error(
-      "Variáveis de ambiente NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY são obrigatórias."
-    );
+    // Retorna NextResponse normal sem erro se as credenciais estiverem ausentes para o deploy
+    return supabaseResponse;
   }
 
   const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
